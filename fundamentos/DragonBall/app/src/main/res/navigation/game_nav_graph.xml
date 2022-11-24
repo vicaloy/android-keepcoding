@@ -1,0 +1,27 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_characters">
+
+    <fragment
+        android:id="@+id/navigation_characters"
+        android:name="com.valoy.dragonball.presentation.game.characters.CharactersFragment"
+        android:label="@string/title_characters"
+        tools:layout="@layout/fragment_characters" >
+        <action
+            android:id="@+id/action_navigation_characters_to_navigation_fight"
+            app:destination="@id/navigation_fight" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_fight"
+        android:name="com.valoy.dragonball.presentation.game.fight.FightFragment"
+        android:label="@string/title_fight"
+        tools:layout="@layout/fragment_fight" >
+        <action
+            android:id="@+id/action_navigation_fight_to_navigation_characters"
+            app:destination="@id/navigation_characters" />
+    </fragment>
+
+</navigation>

@@ -36,24 +36,39 @@ class CharactersFragment : Fragment(), CharactersAdapter.Listener {
         observeState()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
+    override fun onClickListener(character: CharacterDTO) {
+        viewModel.onCharacterClick(character)
+    }
+
     private fun observeState() {
         viewModel.stateLiveData.observe(viewLifecycleOwner) {
-            when (it) {
-                is CharactersViewModel.State.Loading -> {
-                    binding?.progress?.visibility = View.VISIBLE
-                }
-                is CharactersViewModel.State.Success -> {
-                    bindRecycler(it.characters)
-                    it.winner?.let { winner -> showWinner(winner) }
-                    binding?.progress?.visibility = View.GONE
-                }
-                is CharactersViewModel.State.Error -> {
-                    binding?.progress?.visibility = View.GONE
-                }
-                is CharactersViewModel.State.Fight -> {
-                    fightNavigate(it.selectedId, it.randomId)
+
+            it.getContentIfNotHandled()?.let {
+                state ->
+
+                when (state) {
+                    is CharactersViewModel.State.Loading -> {
+                        binding?.progress?.visibility = View.VISIBLE
+                    }
+                    is CharactersViewModel.State.Success -> {
+                        bindRecycler(state.characters)
+                        state.winner?.let { winner -> showWinner(winner) }
+                        binding?.progress?.visibility = View.GONE
+                    }
+                    is CharactersViewModel.State.Error -> {
+                        binding?.progress?.visibility = View.GONE
+                    }
+                    is CharactersViewModel.State.Fight -> {
+                        fightNavigate(state.selectedId, state.randomId)
+                    }
                 }
             }
+
         }
     }
 
@@ -87,15 +102,6 @@ class CharactersFragment : Fragment(), CharactersAdapter.Listener {
             }
             .setIcon(android.R.drawable.ic_dialog_alert)
             .show()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
-    }
-
-    override fun onClickListener(character: CharacterDTO) {
-        viewModel.onCharacterClick(character)
     }
 
     companion object{

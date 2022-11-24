@@ -38,15 +38,21 @@ class FightFragment : Fragment() {
         observeState()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
+
     private fun observeState() {
         viewModel.stateLiveData.observe(viewLifecycleOwner) {
-            when (it) {
-                is FightViewModel.State.Winner -> {
-                    showWinner(it.name)
-                }
-
-                is FightViewModel.State.Characters -> {
-                    bindCharacters(it.selected, it.random)
+            it.getContentIfNotHandled()?.let { state ->
+                when (state) {
+                    is FightViewModel.State.Winner -> {
+                        showWinner(state.name)
+                    }
+                    is FightViewModel.State.Characters -> {
+                        bindCharacters(state.selected, state.random)
+                    }
                 }
             }
         }
@@ -83,11 +89,6 @@ class FightFragment : Fragment() {
 
             viewModel.onFightCharacters(selectedId, randomId)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        binding = null
     }
 
 }

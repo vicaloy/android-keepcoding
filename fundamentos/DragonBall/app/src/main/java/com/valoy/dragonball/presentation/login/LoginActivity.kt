@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.valoy.dragonball.databinding.ActivityLoginBinding
 import com.valoy.dragonball.presentation.game.GameActivity
@@ -45,6 +46,7 @@ class LoginActivity : AppCompatActivity() {
                 is LoginViewModel.State.Error -> {
                     binding.signInButton.isEnabled = true
                     binding.progressBar.visibility = View.GONE
+                    Toast.makeText(this, it.message, Toast.LENGTH_LONG).show()
                 }
             }
         }
